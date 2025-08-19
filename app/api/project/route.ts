@@ -13,6 +13,7 @@ export async function GET() {
     }
     await connectToDB();
     const res = await getAllProject();
+    return res;
   } catch (err) {
     return NextResponse.json(
       {

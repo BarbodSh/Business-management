@@ -1,6 +1,6 @@
 import mongoose, { Document } from "mongoose";
 
-export type statusProject =
+export type StatusProject =
   | "Pending"
   | "In Progress"
   | "Completed"
@@ -14,7 +14,7 @@ export interface ProjectSchemaEntry extends Document {
   creator: mongoose.Types.ObjectId;
   members: mongoose.Types.ObjectId[];
   tasks: mongoose.Types.ObjectId[];
-  status: statusProject;
+  status: StatusProject;
   startDate: Date;
   dueDate: Date;
   priority: PriorityProject;
@@ -26,6 +26,14 @@ export type ProjectType = {
   title: string;
   description: string;
   members: string[];
+  dueDate: Date;
+  priority: PriorityProject;
+};
+
+export type ProjectUpdateType = {
+  title: string;
+  description: string;
+  status: StatusProject;
   dueDate: Date;
   priority: PriorityProject;
 };
