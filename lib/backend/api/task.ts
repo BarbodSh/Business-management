@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import taskModel from "@/models/task";
 import projectModel from "@/models/project";
 import userModel from "@/models/user";
-import { TaskType } from "@/type/task";
+import { TaskType, TaskUpdateType } from "@/type/task";
 import { findInModelWithId } from "../utils/helper";
 
 export const getAllTask = async () => {
@@ -79,5 +79,61 @@ export const createTask = async (body: TaskType) => {
   return NextResponse.json(
     { message: "task create is successfully" },
     { status: 201 }
+  );
+};
+
+export const updateTask = async (body: TaskUpdateType, id: string) => {
+  const updateTask = await taskModel.findOneAndUpdate({ _id: id }, body);
+  if (!updateTask) {
+    return NextResponse.json({ message: "task is not found" }, { status: 404 });
+  }
+  return NextResponse.json(
+    { message: "update task is successfully" },
+    { status: 200 }
+  );
+};
+
+export const removeTask = async (id: string) => {
+  const findTask = await taskModel.findOne({ _id: id });
+  if (!findTask) {
+    return NextResponse.json({ message: "task is not found" }, { status: 404 });
+  }
+  const rmeoveTaskFromProject = await projectModel.findOneAndUpdate(
+    { _id: findTask.project },
+    { $pull: { tasks: id } }
+  );
+  if (!rmeoveTaskFromProject) {
+    return NextResponse.json(
+      { message: "project is not found" },
+      { status: 404 }
+    );
+  }
+  await taskModel.deleteOne({ _id: id });
+
+  return NextResponse.json(
+    { message: "delete task is successfully" },
+    { status: 200 }
+  );
+};
+
+export const updateStatusTask = async (
+  body: { status: string },
+  taskId: string,
+  userId: string
+) => {
+  const isAccess = await taskModel.findOne({
+    _id: taskId,
+    $or: [{ creator: userId }, { assignee: userId }],
+  });
+  if (!isAccess) {
+    return NextResponse.json(
+      { message: "you cant access this api" },
+      { status: 403 }
+    );
+  }
+  await taskModel.findOneAndUpdate({ _id: taskId }, { status: body.status });
+  return NextResponse.json(
+    { message: "status update is successfully" },
+    { status: 200 }
   );
 };

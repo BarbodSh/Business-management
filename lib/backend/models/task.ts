@@ -29,7 +29,7 @@ const schema: Schema = new Schema(
     priority: {
       type: String,
       enum: ["Low", "Medium", "High"],
-      default: "Medium",
+      required: true,
     },
     dueDate: {
       type: Date,

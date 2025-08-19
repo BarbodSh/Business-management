@@ -24,3 +24,10 @@ export type TaskType = {
   project: string;
   dueDate: Date;
 };
+
+export type TaskUpdateType = {
+  title: string;
+  description: string;
+  priority: PriorityTaskType;
+  dueDate: Date;
+};
