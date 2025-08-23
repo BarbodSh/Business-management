@@ -41,3 +41,14 @@ export const verifyToken = (token: string) => {
 export const findInModelWithId = async (model: any, id: string) => {
   return await model.findOne({ _id: id });
 };
+
+export const getDay = () => {
+  const now = new Date();
+  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const endOfDay = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate() + 1
+  );
+  return { now, startOfDay, endOfDay };
+};
