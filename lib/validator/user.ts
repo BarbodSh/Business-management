@@ -25,7 +25,7 @@ export const signinValidate = ({ identifier, password }: SigninType) => {
     return "Please enter a valid Email or a Username with at least 5 characters";
   }
   if (!rules.password.validate(password)) {
-    return rules.message.password;
+    return rules.password.message;
   }
   return true;
 };

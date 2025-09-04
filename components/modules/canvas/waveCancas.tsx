@@ -18,7 +18,7 @@ export default function WaveCanvas() {
       height = canvas.parentElement!.clientHeight;
       canvas.width = width * dpr;
       canvas.height = height * dpr;
-      canvas.style.width = width + 30 + "px";
+      canvas.style.width = width + 20 + "px";
       canvas.style.height = height + "px";
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.scale(dpr, dpr);

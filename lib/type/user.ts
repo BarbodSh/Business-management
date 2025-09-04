@@ -19,6 +19,6 @@ export type SignupType = {
 };
 
 export type SigninType = {
-  identifier: string;
-  password: string;
+  identifier: string | undefined;
+  password: string | undefined;
 };

@@ -70,7 +70,7 @@ export const signinUser = async (body: SigninType) => {
   });
 
   return NextResponse.json(
-    { message: "login is successfully" },
+    { message: "login is successfully", username: checkUser.username },
     { status: 200 }
   );
 };

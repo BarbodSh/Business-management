@@ -24,7 +24,9 @@
       "@/validator/*": ["./lib/validator/*"],
       "@/models/*": ["./lib/backend/models/*"],
       "@/backend/*": ["./lib/backend/*"],
-      "@/templates/*": ["./components/templates/*"]
+      "@/templates/*": ["./components/templates/*"],
+      "@/modules/*": ["./components/modules/*"],
+      "@/frontend/*": ["./lib/frontend/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
