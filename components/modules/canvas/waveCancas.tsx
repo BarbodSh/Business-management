@@ -10,83 +10,101 @@ export default function WaveCanvas() {
     let height = 0;
 
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const pointsCount = 40;
-    const points: { x: number; y: number; targetY: number }[] = [];
+    const flakesCount = 150;
+    const flakes: {
+      x: number;
+      y: number;
+      radius: number;
+      speedY: number;
+      speedX: number;
+    }[] = [];
+
+    let mouseX = -9999;
+    let mouseY = -9999;
 
     const init = () => {
       width = canvas.parentElement!.clientWidth;
       height = canvas.parentElement!.clientHeight;
       canvas.width = width * dpr;
       canvas.height = height * dpr;
-      canvas.style.width = width + 20 + "px";
+      canvas.style.width = width + "px";
       canvas.style.height = height + "px";
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.scale(dpr, dpr);
 
-      points.length = 0;
-      const gap = width / (pointsCount - 1);
-      for (let i = 0; i < pointsCount; i++) {
-        const y = height / 2;
-        points.push({ x: i * gap, y, targetY: y });
-      }
-    };
-
-    const updateTargets = () => {
-      for (let point of points) {
-        point.targetY = height / 2 + (Math.random() - 0.5) * height * 0.7;
+      flakes.length = 0;
+      for (let i = 0; i < flakesCount; i++) {
+        flakes.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          radius: Math.random() * 3 + 2,
+          speedY: Math.random() * 1 + 0.5,
+          speedX: Math.random() * 0.5 - 0.25,
+        });
       }
     };
 
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
 
+      ctx.fillStyle = "white";
       ctx.beginPath();
-      ctx.moveTo(points[0].x, points[0].y);
-
-      for (let i = 1; i < points.length; i++) {
-        const prev = points[i - 1];
-        const curr = points[i];
-        const midX = (prev.x + curr.x) / 2;
-        const midY = (prev.y + curr.y) / 2;
-        ctx.quadraticCurveTo(prev.x, prev.y, midX, midY);
+      for (let flake of flakes) {
+        ctx.moveTo(flake.x, flake.y);
+        ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
       }
-
-      ctx.strokeStyle = "rgba(255,255,255,0.7)";
-      ctx.lineWidth = 3;
-      ctx.stroke();
-
-      ctx.lineTo(width, 0);
-      ctx.lineTo(0, 0);
-      ctx.closePath();
-
-      const gradient = ctx.createLinearGradient(0, 0, width, height);
-      gradient.addColorStop(0, "rgba(94,234,212,0.6)");
-      gradient.addColorStop(0.3, "rgba(56,189,248,0.5)");
-      gradient.addColorStop(0.6, "rgba(168,85,247,0.5)");
-      gradient.addColorStop(1, "rgba(236,72,153,0.4)");
-
-      ctx.fillStyle = gradient;
       ctx.fill();
     };
 
-    const animate = () => {
-      for (let point of points) {
-        point.y += (point.targetY - point.y) * 0.02;
+    const update = () => {
+      for (let flake of flakes) {
+        // حرکت طبیعی
+        flake.y += flake.speedY;
+        flake.x += flake.speedX;
+
+        // واکنش به موس (دافعه)
+        const dx = flake.x - mouseX;
+        const dy = flake.y - mouseY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const minDist = 80; // شعاع تأثیر موس
+
+        if (dist < minDist) {
+          const force = (minDist - dist) / minDist; // شدت دافعه
+          const angle = Math.atan2(dy, dx);
+          flake.x += Math.cos(angle) * force * 5;
+          flake.y += Math.sin(angle) * force * 5;
+        }
+
+        // بازنشانی وقتی از پایین یا کنار بیرون رفت
+        if (flake.y > height) {
+          flake.y = -flake.radius;
+          flake.x = Math.random() * width;
+        }
+        if (flake.x > width) flake.x = 0;
+        if (flake.x < 0) flake.x = width;
       }
+    };
+
+    const animate = () => {
+      update();
       draw();
       requestAnimationFrame(animate);
     };
 
     init();
-    updateTargets();
     animate();
 
-    const targetInterval = setInterval(updateTargets, 1000);
+    // واکنش موس
+    window.addEventListener("mousemove", (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
     window.addEventListener("resize", init);
 
     return () => {
-      clearInterval(targetInterval);
       window.removeEventListener("resize", init);
+      window.removeEventListener("mousemove", () => {});
     };
   }, []);
 

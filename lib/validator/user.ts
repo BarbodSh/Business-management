@@ -8,10 +8,12 @@ export const signupValidate = ({
   password,
   confirmPassword,
 }: SignupType) => {
+  console.log(rules.min.validate(username, 5));
   if (!rules.min.validate(name, 3)) return rules.min.message("name", 3);
   if (!rules.max.validate(name, 12)) return rules.max.message("name", 12);
-  if (!rules.min.validate(username, 5)) return rules.min.message("name", 3);
-  if (!rules.max.validate(username, 12)) return rules.max.message("name", 12);
+  if (!rules.min.validate(username, 5)) return rules.min.message("username", 5);
+  if (!rules.max.validate(username, 12))
+    return rules.max.message("username", 12);
   if (!rules.email.validate(email)) return rules.email.message;
   if (!rules.password.validate(password)) return rules.password.message;
   if (password !== confirmPassword) {

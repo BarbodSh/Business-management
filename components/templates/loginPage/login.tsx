@@ -1,6 +1,6 @@
 "use client";
 import Input from "@/modules/userInput/input";
-import { useLoginMember } from "@/frontend/hook.ts/helper";
+import { useLoginMember } from "@/lib/frontend/hook.ts/login";
 import { signinValidate } from "@/validator/user";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -29,12 +29,14 @@ function Login() {
   return (
     <div className="relative min-h-screen w-full overflow-hidden flex justify-center items-center">
       <WaveCanvas />
-      <div className="flex flex-col justify-center items-start bg-white/30 backdrop-blur-md gap-2 p-5 rounded-xl">
+      <div className="flex flex-col justify-center items-start bg-white/30 backdrop-blur-md gap-2 p-5 rounded-xl w-100">
         <form
           onSubmit={LoginClickHandler}
-          className="flex flex-col justify-center items-start gap-2"
+          className="flex flex-col justify-center items-start gap-2 w-full"
         >
-          <span className="font-bold text-3xl mb-4">Wellcome back :)</span>
+          <span className="font-bold text-3xl mb-4 text-center w-full">
+            Wellcome back :)
+          </span>
           <Input
             name="identifier"
             placeholder="email or username ..."

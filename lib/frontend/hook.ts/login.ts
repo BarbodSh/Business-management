@@ -1,14 +1,15 @@
 import { useMutation } from "@tanstack/react-query";
-import { postApi } from "../api/login";
+import { loginApi } from "../api/login";
 import { showSuccessSwal } from "../utils/helper";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { allStatus } from "../utils/status";
+import { SigninType } from "@/lib/type/user";
 
 export const useLoginMember = () => {
   const router = useRouter();
   return useMutation({
-    mutationFn: (data: Record<string, any>) => postApi(data),
+    mutationFn: (data: SigninType) => loginApi(data),
     onSuccess: (response) => {
       showSuccessSwal(`${response.data.username} login is successfully`, () => {
         router.push("/");
