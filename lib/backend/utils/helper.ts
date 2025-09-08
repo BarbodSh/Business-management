@@ -1,6 +1,13 @@
 import { compare, hash } from "bcryptjs";
 import { sign, verify } from "jsonwebtoken";
-import { Model } from "mongoose";
+
+import { JwtPayload } from "jsonwebtoken";
+
+interface MyJwtPayload extends JwtPayload {
+  id: any;
+  role: string;
+  email: string;
+}
 
 export const createHashPassword = async (password: string) => {
   const hashPassword = await hash(password, 12);
@@ -15,7 +22,7 @@ export const verifyHashPassword = async (
   return verifyPassword;
 };
 
-export const createToken = (data: { id: any; role: string }) => {
+export const createToken = (data: { id: any; role: string; email: string }) => {
   const token = sign(
     { ...data },
     process.env.Token_PRIVATE_KEY || "fdljksgffdlsjgkskjdfgddf",
@@ -31,7 +38,7 @@ export const verifyToken = (token: string) => {
     const validateResult = verify(
       token,
       process.env.Token_PRIVATE_KEY || "fdljksgffdlsjgkskjdfgddf"
-    );
+    ) as MyJwtPayload;
     return validateResult;
   } catch (err) {
     return false;

@@ -24,7 +24,7 @@ function Input({
         id={id}
         name={name}
         type="text"
-        className="p-2 ring-1 rounded-xl w-full outline-0 focus:ring-white transition-all duration-200 ease-in"
+        className="p-2 text-xl ring-1 rounded-xl w-full outline-0 focus:ring-white focus:placeholder:text-white transition-all duration-200 ease-in"
         placeholder={placeholder}
         value={value}
         onChange={(event: React.ChangeEvent<HTMLInputElement>) =>

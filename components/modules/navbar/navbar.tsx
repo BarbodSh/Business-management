@@ -9,7 +9,7 @@ function Navbar() {
         <NavbarLink title="Home" href="#" />
         <NavbarLink title="About" href="#" />
         <NavbarLink title="Contact" href="#" />
-        <NavbarLink title="Login / Register" href="#" />
+        <NavbarLink title="Login / Register" href="/login" />
       </div>
     </nav>
   );

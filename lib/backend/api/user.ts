@@ -5,6 +5,7 @@ import {
   createHashPassword,
   createToken,
   verifyHashPassword,
+  verifyToken,
 } from "../utils/helper";
 import { cookies } from "next/headers";
 
@@ -22,7 +23,7 @@ export const createUser = async (body: SignupType) => {
     );
   }
 
-  const hashPassword = await createHashPassword(password);
+  const hashPassword = await createHashPassword(password!);
 
   const userCount = await userModel.find();
   const newUser = await userModel.create({
@@ -33,7 +34,11 @@ export const createUser = async (body: SignupType) => {
     role: userCount.length <= 0 ? "Admin" : "Employee",
   });
 
-  const token = createToken({ id: newUser._id, role: newUser.role });
+  const token = createToken({
+    id: newUser._id,
+    role: newUser.role,
+    email: newUser.email,
+  });
   cookiesStore.set("token", token, {
     httpOnly: true,
     path: "/",
@@ -57,12 +62,16 @@ export const signinUser = async (body: SigninType) => {
     return NextResponse.json({ message: "user not found" }, { status: 404 });
   }
 
-  const checkPassword = await verifyHashPassword(password, checkUser.password);
+  const checkPassword = await verifyHashPassword(password!, checkUser.password);
   if (!checkPassword) {
     return NextResponse.json({ message: "data is not valid" }, { status: 400 });
   }
 
-  const token = createToken({ id: checkUser._id, role: checkUser.role });
+  const token = createToken({
+    id: checkUser._id,
+    role: checkUser.role,
+    email: checkUser.email,
+  });
   cookiesStore.set("token", token, {
     httpOnly: true,
     path: "/",
@@ -80,6 +89,42 @@ export const getAllUser = async () => {
   return NextResponse.json(
     { message: "users get successfully", users },
     { status: 200 }
+  );
+};
+
+export const getMe = async (token: string | undefined) => {
+  if (!token) {
+    return NextResponse.json(
+      { message: "Unauthorized" },
+      { status: 401, headers: { "Content-Type": "application/json" } }
+    );
+  }
+  const tokenPayload = verifyToken(token);
+  if (!tokenPayload) {
+    return NextResponse.json(
+      { message: "token not valid" },
+      { status: 401, headers: { "Content-Type": "application/json" } }
+    );
+  }
+
+  const findUser = await userModel.findOne({ email: tokenPayload.email });
+  if (!findUser) {
+    return NextResponse.json(
+      { message: "User not found" },
+      { status: 404, headers: { "Content-Type": "application/json" } }
+    );
+  }
+
+  return NextResponse.json(
+    {
+      message: "successfully",
+      user: {
+        id: findUser._id,
+        username: findUser.username,
+        role: findUser.role,
+      },
+    },
+    { status: 200, headers: { "Content-Type": "application/json" } }
   );
 };
 
@@ -102,7 +147,7 @@ export const updateUser = async (body: SignupType, id: string) => {
     return NextResponse.json({ message: "user not found" }, { status: 404 });
   }
 
-  const checkPassword = await verifyHashPassword(password, findUser.password);
+  const checkPassword = await verifyHashPassword(password!, findUser.password);
   if (!checkPassword) {
     return NextResponse.json(
       { message: "password not valid" },
@@ -110,8 +155,8 @@ export const updateUser = async (body: SignupType, id: string) => {
     );
   }
 
-  const hashPassword = await createHashPassword(password);
-  const changeUser = await userModel.findOneAndUpdate(
+  const hashPassword = await createHashPassword(password!);
+  await userModel.findOneAndUpdate(
     { _id: id },
     { name, email, username, password: hashPassword }
   );
