@@ -8,7 +8,7 @@ export default function MainContent() {
     <section>
       <div className="container text-white text-3xl font-bold flex justify-center items-center gap-5 flex-col">
         <motion.div
-          initial={{ x: -100, opacity: 0 }}
+          initial={{ x: -50, opacity: 0 }}
           animate={{ x: 0, opacity: 100 }}
           transition={{ duration: 0.5, ease: "easeIn" }}
           className="text-center flex justify-between gap-10 items-center"
@@ -28,7 +28,7 @@ export default function MainContent() {
           </span>
         </motion.div>
         <motion.div
-          initial={{ x: 100, opacity: 0 }}
+          initial={{ x: 50, opacity: 0 }}
           animate={{ x: 0, opacity: 100 }}
           transition={{ duration: 0.5, ease: "easeIn" }}
           className="text-center flex justify-between gap-10 items-center"

@@ -11,14 +11,14 @@ export interface UserSchemaEntry extends Document {
 }
 
 export type SignupType = {
-  name: string | undefined;
-  username: string | undefined;
-  email: string | undefined;
-  password: string | undefined;
-  confirmPassword: string | undefined;
+  name: string;
+  username: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
 };
 
 export type SigninType = {
-  identifier: string | undefined;
-  password: string | undefined;
+  identifier: string;
+  password: string;
 };

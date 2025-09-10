@@ -10,11 +10,11 @@ import WaveCanvas from "@/components/modules/canvas/waveCancas";
 import { useRegisterMember } from "@/lib/frontend/hook.ts/register";
 
 function Register() {
-  const [name, setName] = useState<string>();
-  const [username, setUsername] = useState<string>();
-  const [email, setEmail] = useState<string>();
-  const [password, setPassword] = useState<string>();
-  const [confirmPassword, setConfirmPassword] = useState<string>();
+  const [name, setName] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
   const registerMutation = useRegisterMember();
 
   const LoginClickHandler = async (event: React.FormEvent<HTMLFormElement>) => {

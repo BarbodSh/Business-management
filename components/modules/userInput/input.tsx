@@ -6,7 +6,7 @@ type InputType = {
   id: string;
   labelName: string;
   value: string | undefined;
-  setValue: React.Dispatch<React.SetStateAction<string | undefined>>;
+  setValue: React.Dispatch<React.SetStateAction<string>>;
 };
 
 function Input({

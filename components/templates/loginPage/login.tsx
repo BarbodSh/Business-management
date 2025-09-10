@@ -9,8 +9,8 @@ import { showErrorSwal } from "@/lib/frontend/utils/helper";
 import WaveCanvas from "@/components/modules/canvas/waveCancas";
 
 function Login() {
-  const [identifier, setIdentifier] = useState<string>();
-  const [password, setPassword] = useState<string>();
+  const [identifier, setIdentifier] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
   const loginMutation = useLoginMember();
   const LoginClickHandler = async (event: React.FormEvent<HTMLFormElement>) => {
